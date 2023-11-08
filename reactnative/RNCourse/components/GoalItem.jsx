@@ -19,8 +19,9 @@ export default GoalInput;
 const styles = StyleSheet.create({
   goalItem: {
     margin: 8,
+    marginTop: 20,
     borderRadius: 6,
-    backgroundColor: "#5e0acc",
+    backgroundColor: "#ea7a7a",
   },
   goalText: {
     color: "white",

@@ -3,6 +3,7 @@ import { useState } from "react";
 import {
   Button,
   FlatList,
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,18 +15,17 @@ import GoalItem from "./components/GoalItem";
 import GoalInput from "./components/GoalInput";
 
 export default function App() {
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [enteredGoalText, setEnteredGoalText] = useState("");
 
   const [courseGoals, setCourseGoals] = useState([]);
 
-  function startAddGoalHandler(){
+  function startAddGoalHandler() {
     setIsModalOpen(true);
   }
 
-  function closeAddGoalHandler(){
+  function closeAddGoalHandler() {
     setIsModalOpen(false);
   }
 
@@ -51,60 +51,71 @@ export default function App() {
   }
 
   function deleteGoalHandler(id) {
-    setCourseGoals((prevGoals)=>{
-      return prevGoals.filter((goal)=> goal.id !==id)
-    })
+    setCourseGoals((prevGoals) => {
+      return prevGoals.filter((goal) => goal.id !== id);
+    });
   }
 
   return (
-    <View style={styles.appContainer}>
-
-      <Button title="Add New Goal" color="#5e0acc" onPress={startAddGoalHandler} />
-
-      <GoalInput
-        enteredGoalText={enteredGoalText}
-        goalInputHandler={goalInputHandler}
-        addGoalHandler={addGoalHandler}
-        closeAddGoalHandler={closeAddGoalHandler}
-        visible={isModalOpen}
-
-      />
-
-      <View style={styles.goalsContainer}>
-        {/* <ScrollView alwaysBounceVertical={false}>
-          {courseGoals.map((goal, i) => (
-            <View style={styles.goalItem} key={i}>
-              <Text style={styles.goalText} >{goal}</Text>
-            </View>
-          ))}
-        </ScrollView> */}
-
-        <FlatList
-          data={courseGoals}
-          renderItem={(itemData) => {
-            return (
-              <GoalItem
-                text={itemData.item.text}
-                id={itemData.item.id}
-                onDeleteItem={deleteGoalHandler}
-              />
-            );
-          }}
-          keyExtractor={(item, index) => {
-            return item.id;
-          }}
-          alwaysBounceVertical={false}
+    <>
+      <StatusBar style="light" />
+      <View style={styles.appContainer}>
+        <Button
+          title="Add New Goal"
+          color="#9262cf"
+          onPress={startAddGoalHandler}
         />
+
+        <GoalInput
+          enteredGoalText={enteredGoalText}
+          goalInputHandler={goalInputHandler}
+          addGoalHandler={addGoalHandler}
+          closeAddGoalHandler={closeAddGoalHandler}
+          visible={isModalOpen}
+        />
+
+        {courseGoals.length>0? (
+          <View style={styles.goalsContainer}>
+          <FlatList
+            data={courseGoals}
+            renderItem={(itemData) => {
+              return (
+                <GoalItem
+                  text={itemData.item.text}
+                  id={itemData.item.id}
+                  onDeleteItem={deleteGoalHandler}
+                />
+              );
+            }}
+            keyExtractor={(item, index) => {
+              return item.id;
+            }}
+            alwaysBounceVertical={false}
+          />
+        </View>
+        ) : (
+          <View style={styles.addGoalImageCont}>
+            <Image
+              style={styles.addGoalImage}
+              source={require("./assets/addGoal.png")}
+            />
+
+            <Text style={styles.goalsText}>Add Your Goals to List !</Text>
+          </View>
+        )}
+
+        
       </View>
-    </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   appContainer: {
-    flex: 1,
+    // flex: 1,
     paddingTop: 50,
     paddingHorizontal: 16,
+    marginTop: 20
   },
   inputContainer: {
     flex: 1,
@@ -122,7 +133,21 @@ const styles = StyleSheet.create({
     marginRight: 8,
     padding: 8,
   },
-  goalsContainer: {
-    flex: 5,
+  // goalsContainer: {
+  //   flex: 5,
+  // },
+  addGoalImageCont: {
+    alignItems: "center",
+    justifyContent: "center",
   },
+  addGoalImage: {
+    width: "70%",
+    height: "70%",
+  },
+  goalsText:{
+    fontSize: 20,
+    color: "#fff",
+    fontWeight: "bold",
+    letterSpacing: 2
+  }
 });

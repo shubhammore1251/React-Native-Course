@@ -4,7 +4,7 @@ import Colors from "../../constants/colors";
 const PrimaryButton = ({ children, onPress }) => {
   
   return (
-    <View style={styles.buttonOuterContainer}>
+    <View style={[styles.buttonOuterContainer, styles.shadowProp]}>
       <Pressable
         style={({ pressed }) =>
           pressed
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     margin: 4,
     overflow: "hidden",
     borderWidth: 1,
-    borderColor: "#fff",
+    borderColor: Colors.primary600,
     borderStyle: "solid",
   },
   buttonInnerContainer: {
@@ -43,5 +43,12 @@ const styles = StyleSheet.create({
   },
   pressed: {
     opacity: 0.75,
+  },
+  shadowProp: {
+    shadowColor: '#c683ec',
+    shadowOffset: {width: -2, height: 10},
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+    elevation: 5
   },
 });

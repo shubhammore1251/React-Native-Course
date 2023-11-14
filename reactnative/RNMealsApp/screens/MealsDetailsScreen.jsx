@@ -10,16 +10,40 @@ import { MEALS } from "../data/dummyData";
 import MealDetails from "../components/MealDetails";
 import Subtitle from "../components/MealDetail/Subtitle";
 import List from "../components/MealDetail/List";
-import { useLayoutEffect } from "react";
+import { /*useContext,*/ useLayoutEffect } from "react";
 import IconButton from "../components/IconButton";
+import { addFavourite, removeFavourite } from "../store/redux/favourites";
+import { useDispatch, useSelector } from "react-redux";
+// import { FavouritesContext } from "../store/context/FavouritesContext";
 
 const MealsDetailsScreen = ({ route, navigation }) => {
+
+  // const favouriteMealsCtx = useContext(FavouritesContext);
+
+  const favouriteMealIds = useSelector(state => state.favouriteMeals.ids);
+
+  const dispatch = useDispatch();
+
   const mealId = route.params.mealId;
 
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
 
-  function headerButtonPressHandler() {
-    console.log("button clicked");
+  // const mealIsFavourite = favouriteMealsCtx.ids.includes(mealId);
+
+  const mealIsFavourite = favouriteMealIds.includes(mealId);
+
+  function changeFavouriteStatusHandler() {
+    if (mealIsFavourite) {
+      // favouriteMealsCtx.removeFavourite(mealId);
+      dispatch(removeFavourite({
+        id: mealId,
+      }))
+    }else {
+      // favouriteMealsCtx.addFavourite(mealId);
+      dispatch(addFavourite({
+        id: mealId,
+      }))
+    }
   }
 
   useLayoutEffect(() => {
@@ -28,14 +52,14 @@ const MealsDetailsScreen = ({ route, navigation }) => {
       headerRight: () => {
         return (
           <IconButton
-            icon="star"
+            icon={mealIsFavourite ? "star" : "star-outline"}
             color="white"
-            onPress={headerButtonPressHandler}
+            onPress={changeFavouriteStatusHandler}
           />
         );
       },
     });
-  }, [mealId, navigation]);
+  }, [changeFavouriteStatusHandler, navigation]);
 
   return (
     <ScrollView style={styles.rootContainer}>
